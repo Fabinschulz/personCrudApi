@@ -1,8 +1,21 @@
+using Crud.API.Domain.Interfaces;
+using Crud.API.Infra.Context;
+using Crud.API.Infra.Repository;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+                    
 builder.Services.AddControllers();
+// Add services to the container.
+var builderServices = builder.Services;
+builderServices.AddControllers();
+builderServices.AddDbContext<SystemContext>(
+                context => context.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"))
+            );
+
+builderServices.AddScoped<IPersonRepository, PersonRepository>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
