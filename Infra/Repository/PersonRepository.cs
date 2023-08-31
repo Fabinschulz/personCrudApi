@@ -2,6 +2,7 @@
 using Crud.API.Domain.Interfaces;
 using Crud.API.Infra.Context;
 using Microsoft.EntityFrameworkCore;
+using static Crud.API.Domain.Entities.ListaDataPagination;
 
 namespace Crud.API.Infra.Repository
 {
@@ -40,12 +41,75 @@ namespace Crud.API.Infra.Repository
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<IEnumerable<Person>> GetAll()
+        public async Task<ListDataPagination<Person>> ListPerson(int page, int size, string searchString, string registrationNumber, string email, bool isDeleted, string orderBy)
         {
-            return await _context.Persons
+            var query = _context.Persons
                 .Include(x => x.Address)
-                .ToListAsync();
-        }
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                query = query.Where(x => x.PersonName.Contains(searchString));
+            }
+
+            if (!string.IsNullOrEmpty(registrationNumber))
+            {
+                query = query.Where(x => x.RegistrationNumber.Contains(registrationNumber));
+            }
+
+            if (!string.IsNullOrEmpty(email))
+            {
+                query = query.Where(x => x.Email.Contains(email));
+            }
+
+            if (isDeleted)
+            {
+                query = query.Where(x => x.IsDeleted == isDeleted);
+            }
+
+            if (!string.IsNullOrEmpty(orderBy))
+            {
+                switch (orderBy)
+                {
+                    case "personName":
+                        query = query.OrderBy(x => x.PersonName);
+                        break;
+                    case "email":
+                        query = query.OrderBy(x => x.Email);
+                        break;
+                    case "registrationNumber":
+                        query = query.OrderBy(x => x.RegistrationNumber);
+                        break;
+                    case "birthDate":
+                        query = query.OrderBy(x => x.BirthDate);
+                        break;
+                    case "phoneNumber":
+                        query = query.OrderBy(x => x.PhoneNumber);
+                        break;
+                    case "address":
+                        query = query.OrderBy(x => x.Address);
+                        break;
+                    case "isDeleted":
+                        query = query.OrderBy(x => x.IsDeleted);
+                        break;
+                    default:
+                        query = query.OrderBy(x => x.PersonName);
+                        break;
+                }
+            }   
+
+            var count = await query.CountAsync();
+            var data = await query.Skip((page - 1) * size).Take(size).ToListAsync();
+
+            return new ListDataPagination<Person>
+            {
+                Page = page,
+                TotalPages = (int)Math.Ceiling(count / (double)size),
+                TotalItems = count,
+                Data = data
+            };               
+            
+        }   
 
         public async Task<int> SaveChanges()
         {

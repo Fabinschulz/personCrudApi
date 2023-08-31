@@ -20,7 +20,5 @@ namespace Crud.API.Domain.Entities
 
         public string Complement { get; set; }
 
-        public Guid PersonId { get; set; }
-        public Person Person { get; set; }
     }
 }

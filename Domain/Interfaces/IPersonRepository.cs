@@ -1,4 +1,5 @@
 ﻿using Crud.API.Domain.Entities;
+using static Crud.API.Domain.Entities.ListaDataPagination;
 
 namespace Crud.API.Domain.Interfaces
 {
@@ -8,7 +9,8 @@ namespace Crud.API.Domain.Interfaces
         Task Update(Person person);
         Task Delete(Person person);
         Task<Person> GetById(Guid id);
-        Task<IEnumerable<Person>> GetAll();
+        Task<ListDataPagination<Person>> ListPerson(int page, int size, string searchString, string registrationNumber, string email, bool isDeleted, string orderBy);
+
 
         Task<int> SaveChanges();
     }
