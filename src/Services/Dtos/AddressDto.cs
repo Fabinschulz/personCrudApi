@@ -1,8 +1,6 @@
-﻿using Crud.API.Domain.Enumerations;
-
-namespace Crud.API.Domain.Entities
+﻿namespace Crud.API.src.Services.Dtos
 {
-    public class Address : BaseEntity
+    public class AddressDto
     {
         public string AddressName { get; set; }
 
@@ -12,13 +10,14 @@ namespace Crud.API.Domain.Entities
 
         public string State { get; set; }
 
-        public UF UF { get; set; }
+        public string UF { get; set; }
+
+        public string UFDisplay { get; set; }
 
         public string District { get; set; }
 
         public string Number { get; set; }
 
         public string Complement { get; set; }
-
     }
 }

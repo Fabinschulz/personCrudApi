@@ -1,7 +1,9 @@
-using Crud.API.Domain.Interfaces;
-using Crud.API.Infra.Context;
-using Crud.API.Infra.Repository;
+using Crud.API.src.Domain.Interfaces;
+using Crud.API.src.Infra.Context;
+using Crud.API.src.Infra.Repository;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,16 @@ builderServices.AddControllers();
 builderServices.AddDbContext<SystemContext>(
                 context => context.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"))
             );
+
+builderServices.AddAutoMapper(typeof(Program));
+
+var apiXmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+var apiXmlPath = Path.Combine(AppContext.BaseDirectory, apiXmlFile);
+builderServices.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new() { Title = "Person API", Version = "v1" });
+    c.IncludeXmlComments(apiXmlPath);
+});
 
 builderServices.AddScoped<IPersonRepository, PersonRepository>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

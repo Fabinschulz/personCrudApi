@@ -1,4 +1,4 @@
-﻿namespace Crud.API.Domain.Entities
+﻿namespace Crud.API.src.Domain.Entities
 {
     public class BaseEntity
     {

@@ -1,12 +1,11 @@
-﻿using Crud.API.Domain.Entities;
-using Crud.API.Domain.Interfaces;
-using Crud.API.Infra.Context;
+﻿using Crud.API.src.Domain.Entities;
+using Crud.API.src.Domain.Interfaces;
+using Crud.API.src.Infra.Context;
 using Microsoft.EntityFrameworkCore;
-using static Crud.API.Domain.Entities.ListaDataPagination;
 
-namespace Crud.API.Infra.Repository
+namespace Crud.API.src.Infra.Repository
 {
-    public class PersonRepository: IPersonRepository
+    public class PersonRepository : IPersonRepository
     {
         private readonly SystemContext _context;
 
@@ -19,7 +18,7 @@ namespace Crud.API.Infra.Repository
         {
             _context.Persons.Add(person);
             await _context.SaveChangesAsync();
-            
+
         }
 
         public async Task Update(Person person)
@@ -34,11 +33,17 @@ namespace Crud.API.Infra.Repository
             await _context.SaveChangesAsync();
         }
 
+        public async Task Delete(Guid id)
+        {
+            _context.Persons.Remove(await GetById(id));
+            await _context.SaveChangesAsync();
+            return;
+        }
+
         public async Task<Person> GetById(Guid id)
         {
-            return await _context.Persons
-                .Include(x => x.Address)
-                .FirstOrDefaultAsync(x => x.Id == id);
+            var person = await _context.Persons.Include(x => x.Address).FirstOrDefaultAsync(x => x.Id == id);
+            return person;
         }
 
         public async Task<ListDataPagination<Person>> ListPerson(int page, int size, string searchString, string registrationNumber, string email, bool isDeleted, string orderBy)
@@ -96,7 +101,7 @@ namespace Crud.API.Infra.Repository
                         query = query.OrderBy(x => x.PersonName);
                         break;
                 }
-            }   
+            }
 
             var count = await query.CountAsync();
             var data = await query.Skip((page - 1) * size).Take(size).ToListAsync();
@@ -107,14 +112,11 @@ namespace Crud.API.Infra.Repository
                 TotalPages = (int)Math.Ceiling(count / (double)size),
                 TotalItems = count,
                 Data = data
-            };               
-            
-        }   
+            };
 
-        public async Task<int> SaveChanges()
-        {
-            return await _context.SaveChangesAsync();
-        }   
+        }
+
+        public async Task SaveChangesAsync() => await _context.SaveChangesAsync();
 
     }
 }

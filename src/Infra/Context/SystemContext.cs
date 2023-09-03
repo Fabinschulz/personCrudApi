@@ -1,8 +1,8 @@
-﻿using Crud.API.Domain.Entities;
+﻿using Crud.API.src.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace Crud.API.Infra.Context
+namespace Crud.API.src.Infra.Context
 {
     public class SystemContext : DbContext
     {

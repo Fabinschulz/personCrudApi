@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Crud.API.Domain.Enumerations
+namespace Crud.API.src.Domain.Enumerations
 {
     public enum UF
     {

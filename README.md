@@ -14,8 +14,11 @@ Certifique-se de ter o .NET Core SDK, o Docker e o Visual Studio instalados em s
 ## Configuração do Projeto
 
 1. Clone este repositório para a sua máquina local.
-2. Abra o projeto no Visual Studio.
+2. Abra e Execute o projeto no Visual Studio.
 3. Certifique-se de que a conexão com o banco de dados SQLite está configurada corretamente no arquivo `appsettings.json`.
+4. No terminal (Propmt de Comando), navegue até a pasta docker e rode o comando `docker compose up` para iniciar o container do banco de dados SQLite.
+6. No terminal (Propmt de Comando), rode o comando `docker ps` para verificar se o container está em execução.
+
 
 ## Endpoints da API
 
@@ -35,6 +38,8 @@ A API oferece os seguintes endpoints para gerenciar o cadastro de pessoas:
 - Microsoft.EntityFrameworkCore.Sqlite (6.0.7)
 - Microsoft.EntityFrameworkCore.Tools (6.0.7)
 - Microsoft.Extensions.DependencyInjection (6.0.1)
+- AutoMapper (12.0.0)
+- AutoMapper.Extensions.Microsoft.DependencyInjection (12.0.0)
 
 ## Migrations
 - dotnet ef migrations add InitialCreate

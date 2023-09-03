@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace Crud.API.Domain.Entities
+namespace Crud.API.src.Domain.Entities
 {
     public class Person : BaseEntity
     {
